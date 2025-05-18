@@ -14,13 +14,10 @@ class Master(BaseModel):
 
 async def get_Masters() -> list[Master]:
     async with httpx.AsyncClient() as client:
-        response = await client.get(settings.URL + settings.API_MASTERS)
-        data = response.json()
-        print(type(data))
-        masters = [Master(**master) for master in data]
-        return masters
-
-
-
-
-
+        try:
+            response = await client.get(settings.URL + settings.API_MASTERS)
+            response.raise_for_status()
+            return [Master(**master) for master in response.json()]
+        
+        except (httpx.HTTPError, ValueError, KeyError) as e:
+            return None
