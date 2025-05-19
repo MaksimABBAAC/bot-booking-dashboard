@@ -77,49 +77,29 @@ async def get_available_appointment_by_master_id(master_id = None, date = None) 
 
 
 async def book_appointment(tg_id: int, appointment_id: int) -> dict:
-    """
-    Забронировать запись через API
-    
-    Аргументы:
-        tg_id: ID пользователя в Telegram
-        appointment_id: ID записи для бронирования
-    
-    Возвращает:
-        Словарь с результатом операции:
-        - При успехе: {'status': 'success', ...}
-        - При ошибке: {'error': 'описание ошибки'}
-    """
     async with httpx.AsyncClient() as client:
         try:
-            # Формируем URL для бронирования
             url = f"{settings.BASE_URL}API/book/"
             
-            # Данные для отправки
             data = {
                 "appointment_id": appointment_id,
                 "tg_id": int(tg_id)
             }
             
-            # Отправляем POST-запрос
             response = await client.post(url, data=data, timeout=100.0)
             
-            # Проверяем статус ответа
             response.raise_for_status()
             
-            # Возвращаем результат в формате JSON
             return response.json()
             
         except httpx.HTTPStatusError as e:
-            # Обработка HTTP ошибок (4xx, 5xx)
             error_message = f"Ошибка сервера: {e.response.status_code}"
             if e.response.text:
                 error_message += f" - {e.response.text}"
             return {"error": error_message}
             
         except httpx.RequestError as e:
-            # Ошибки сети (нет соединения, таймаут и т.д.)
             return {"error": f"Ошибка подключения: {str(e)}"}
             
         except Exception as e:
-            # Непредвиденные ошибки
             return {"error": f"Неизвестная ошибка: {str(e)}"}

@@ -48,9 +48,7 @@ async def callbacks_master(callback: types.CallbackQuery, callback_data: TimeCal
         )
         
         if "error" in result:
-            # Обрезаем сообщение об ошибке до 1000 символов
-            error_msg = result['error'][:1000]
-            await callback.message.answer(f"❌ Ошибка бронирования: {error_msg}")
+            await callback.message.answer(f"❌ Ошибка бронирования:")
         else:
             await callback.message.answer("✅ Запись успешно забронирована!")
     except Exception as e:
