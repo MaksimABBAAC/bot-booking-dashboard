@@ -51,7 +51,7 @@ async def callbacks_master(callback: types.CallbackQuery, callback_data: TimeCal
             await callback.message.answer(f"❌ Ошибка бронирования:")
         else:
             await callback.message.answer("✅ Запись успешно забронирована!")
-    except Exception as e:
+    except:
         await callback.message.answer("❌ Произошла ошибка при бронировании")
     
 
