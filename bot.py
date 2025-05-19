@@ -3,7 +3,7 @@ import logging
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters.command import Command
 from config import settings
-from keyboards.keyboards_master import DateCallbackFactory, MastersCallbackFactory, TimeCallbackFactory, data_message_for_description_master, get_keyboard_time_appointment, get_keyboards_masters
+from keyboards.keyboards_master import DateCallbackFactory, MastersCallbackFactory, TimeCallbackFactory, data_message_for_description_master, get_cards_appoiment, get_keyboard_time_appointment, get_keyboards_masters
 from utils import book_appointment
 
 logging.basicConfig(level=logging.INFO)
@@ -17,8 +17,23 @@ async def cmd_start(message: types.Message):
     keyboard = await get_keyboards_masters()
     await message.answer("Hello message", reply_markup= keyboard)
 
-async def main():
-    await dp.start_polling(bot)
+@dp.message(Command("my_book"))
+async def cmd_my_appoiments(message: types.Message):
+    cards, error = await get_cards_appoiment(message.from_user.id)
+    
+    if error:
+        await message.answer(text="Ошибка")
+        return
+        
+    if not cards:
+        await message.answer(text="У вас нет записей")
+        return
+        
+    for i in range(0, len(cards), 2):
+        text = cards[i]
+        keyboard = cards[i+1] if i+1 < len(cards) else None
+        await message.answer(text=text, reply_markup=keyboard)
+
 
 @dp.callback_query(MastersCallbackFactory.filter())
 async def callbacks_master(
@@ -53,7 +68,20 @@ async def callbacks_master(callback: types.CallbackQuery, callback_data: TimeCal
             await callback.message.answer("✅ Запись успешно забронирована!")
     except:
         await callback.message.answer("❌ Произошла ошибка при бронировании")
-    
+
+
+
+async def set_commands(bot: Bot):
+    commands = [
+        types.BotCommand(command="start", description="Начать работу"),
+        types.BotCommand(command="my_book", description="Мои записи")
+    ]
+    await bot.set_my_commands(commands)
+
+async def main():
+    await set_commands(bot)
+    await dp.start_polling(bot)
+    await dp.start_polling(bot)
 
 if __name__ == "__main__":
     asyncio.run(main())

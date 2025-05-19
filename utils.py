@@ -75,11 +75,21 @@ async def get_available_appointment_by_master_id(master_id = None, date = None) 
         except (httpx.HTTPError, ValueError, KeyError) as e:
             return None
 
+async def get_booking_appointment_by_tg_id(tg_id: int) -> list[Availabl_appointment]:
+    async with httpx.AsyncClient() as client:
+        try:
+            url = settings.BASE_URL + settings.API_BOOKING + f'?tg_id={tg_id}'
+            response = await client.get(url)
+            response.raise_for_status()
+            return [Availabl_appointment(**appointment) for appointment in response.json()]
+        except (httpx.HTTPError, ValueError, KeyError) as e:
+            return 'error'
+
 
 async def book_appointment(tg_id: int, appointment_id: int) -> dict:
     async with httpx.AsyncClient() as client:
         try:
-            url = f"{settings.BASE_URL}API/book/"
+            url = settings.BASE_URL + settings.API_BOOK
             
             data = {
                 "appointment_id": appointment_id,

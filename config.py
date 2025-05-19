@@ -5,6 +5,8 @@ class Settings(BaseSettings):
     BASE_URL: str
     API_MASTERS: str
     API_APPOINTMENTS: str
+    API_BOOKING: str
+    API_BOOK: str
 
     model_config = SettingsConfigDict(env_file='.env')
 

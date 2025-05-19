@@ -1,6 +1,6 @@
 from aiogram import types
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from utils import Availabl_appointment, get_available_appointment_by_master_id, get_master_by_id, get_masters_list
+from utils import Availabl_appointment, get_available_appointment_by_master_id, get_booking_appointment_by_tg_id, get_master_by_id, get_masters_list
 from typing import Optional
 from aiogram.filters.callback_data import CallbackData
 import datetime
@@ -19,6 +19,11 @@ class DateCallbackFactory(CallbackData, prefix="date"):
 
 class TimeCallbackFactory(CallbackData, prefix="time"):
     appointment_id: Optional[int] = None
+
+class DeleteEditCallbackFactory(CallbackData, prefix="appoiment"):
+    appointment_id: int
+    action: str
+
 
 async def get_keyboards_masters() -> types.InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
@@ -40,6 +45,8 @@ async def data_message_for_description_master(master_id):
     master = await get_master_by_id(master_id)
     keyboard_date_appointment = await get_keyboard_date_appointment(available_appointment_list, master)
     return master.description, keyboard_date_appointment
+
+
 
 async def get_keyboard_date_appointment(
     available_appointment_list: list[Availabl_appointment], 
@@ -67,6 +74,8 @@ async def get_keyboard_date_appointment(
     
     return builder.as_markup()
 
+
+
 async def get_keyboard_time_appointment(master_id, date) -> types.InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
     available_appointment_list = await get_available_appointment_by_master_id(master_id, date)
@@ -82,3 +91,26 @@ async def get_keyboard_time_appointment(master_id, date) -> types.InlineKeyboard
             callback_data = "error"))
     return builder.as_markup()
 
+
+async def get_cards_appoiment(tg_id):
+    cards = []
+    error = None
+
+    booking_appoiments_list = await get_booking_appointment_by_tg_id(tg_id)
+    if booking_appoiments_list:
+        for appointment in booking_appoiments_list:
+            builder = InlineKeyboardBuilder()
+            cards.append(f'Вы записаны на {appointment.date} {appointment.start_time} - {appointment.end_time}')
+            builder.button(
+                text='перенести',
+                callback_data=DeleteEditCallbackFactory(action='edit', appointment_id=appointment.id).pack()
+            )
+            builder.button(
+                text='отменить',
+                callback_data=DeleteEditCallbackFactory(action='delete', appointment_id=appointment.id).pack()
+            )
+            cards.append(builder.as_markup())
+    elif booking_appoiments_list == 'error':
+        error = 'error'
+
+    return cards, error
