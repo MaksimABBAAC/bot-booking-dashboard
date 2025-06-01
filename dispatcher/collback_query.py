@@ -13,7 +13,7 @@ async def callbacks_master(
     callback_data: MastersCallbackFactory
 ):
     description, keyboard = await data_message_for_description_master(callback_data.master_id)
-    await callback.message.answer("Hello message\n" + description, reply_markup= keyboard)
+    await callback.message.answer(description + "\n выберете дату", reply_markup= keyboard)
 
 @router.callback_query(DateCallbackFactory.filter())
 async def callbacks_master(
@@ -24,7 +24,7 @@ async def callbacks_master(
         callback_data.master_id, 
         callback_data.date
         )
-    await callback.message.answer("Hello message\n", reply_markup= keyboard)
+    await callback.message.answer("Выберете время\n", reply_markup= keyboard)
 
 @router.callback_query(TimeCallbackFactory.filter())
 async def callbacks_master(callback: CallbackQuery, callback_data: TimeCallbackFactory):

@@ -71,3 +71,31 @@ async def book_appointment(tg_id: int, appointment_id: int) -> dict:
             
         except Exception as e:
             return {"error": f"Неизвестная ошибка: {str(e)}"}
+
+async def delete_book_appointment(tg_id: int, appointment_id: int) -> dict:
+    async with AsyncClient() as client:
+        try:
+            url = settings.BASE_URL + settings.API_DELETE_BOOK
+
+            data = {
+                'appointment_id': appointment_id,
+                "tg_id": tg_id
+            }
+
+            response = await client.post(url, data=data, timeout=100.0)
+
+            response.raise_for_status()
+
+            return response.json()
+        
+        except HTTPStatusError as e:
+            error_message = f"Ошибка сервера: {e.response.status_code}"
+            if e.response.text:
+                error_message += f" - {e.response.text}"
+            return {"error": error_message}
+            
+        except RequestError as e:
+            return {"error": f"Ошибка подключения: {str(e)}"}
+            
+        except Exception as e:
+            return {"error": f"Неизвестная ошибка: {str(e)}"}

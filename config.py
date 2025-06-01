@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     API_APPOINTMENTS: str
     API_BOOKING: str
     API_BOOK: str
+    API_DELETE_BOOK: str
 
     model_config = SettingsConfigDict(env_file='.env')
 
