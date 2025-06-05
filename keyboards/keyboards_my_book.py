@@ -22,7 +22,7 @@ async def get_cards_appoiment(tg_id):
             builder.button(
                 text='отменить',
                 callback_data=DeleteEditCallbackFactory(
-                    action='delete', 
+                    action = 'delete', 
                     appointment_id=appointment.id)
                     .pack()
             )

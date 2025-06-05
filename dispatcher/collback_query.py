@@ -1,8 +1,9 @@
 from aiogram import Router
 from aiogram.types import CallbackQuery
+from dispatcher.comands import cmd_my_appoiments
 
-from keyboards.keyboards_master import DateCallbackFactory, MastersCallbackFactory, TimeCallbackFactory, data_message_for_description_master, get_keyboard_time_appointment
-from utils.http_appoiment import book_appointment
+from keyboards.keyboards_master import DateCallbackFactory, MastersCallbackFactory, TimeCallbackFactory, data_message_for_description_master, get_keyboard_time_appointment, DeleteEditCallbackFactory
+from utils.http_appoiment import book_appointment, delete_book_appointment
 
 
 router = Router()
@@ -27,10 +28,10 @@ async def callbacks_master(
     await callback.message.answer("Выберете время\n", reply_markup= keyboard)
 
 @router.callback_query(TimeCallbackFactory.filter())
-async def callbacks_master(callback: CallbackQuery, callback_data: TimeCallbackFactory):
+async def callbacks_master(
+    callback: CallbackQuery, 
+    callback_data: TimeCallbackFactory):
     try:
-        user_id = callback.from_user.id
-        print(f"Бронирование от пользователя с ID: {user_id}")
         result = await book_appointment(
             tg_id=callback.from_user.id,
             appointment_id=callback_data.appointment_id
@@ -42,3 +43,23 @@ async def callbacks_master(callback: CallbackQuery, callback_data: TimeCallbackF
             await callback.message.answer("✅ Запись успешно забронирована!")
     except:
         await callback.message.answer("❌ Произошла ошибка при бронировании")
+
+
+@router.callback_query(DeleteEditCallbackFactory.filter())
+async def delete_book(
+    callback: CallbackQuery,
+    callback_data: DeleteEditCallbackFactory
+):
+    if callback_data.action == 'delete':
+        try:
+            result = await delete_book_appointment(
+                tg_id = callback.from_user.id,
+                appointment_id = callback_data.appointment_id
+            )
+
+            if "error" in result:
+                await callback.message.answer(f"❌ Ошибка в отмене бронирования:")
+            else:
+                await callback.message.answer("✅ Бронирование успешно отменено!")
+        except:
+            await callback.message.answer("❌ Произошла ошибка при отмене бронирования")
