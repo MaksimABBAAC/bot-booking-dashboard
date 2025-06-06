@@ -14,7 +14,7 @@ Master = namedtuple("Master", ["id", "name", "patronymic", "specialty"])
 async def test_get_keyboards_masters_with_masters():
     master = Master(id=1, name="Иван", patronymic="Иванович", specialty="Парикмахер")
     
-    with patch("bot.utils.http_master.get_masters_list", new=AsyncMock(return_value=[master])):
+    with patch("bot.keyboards.keyboards_master.get_masters_list", new=AsyncMock(return_value=[master])):
         with patch("bot.keyboards.collbackFactory.MastersCallbackFactory") as mock_factory:
             mock_factory.return_value.pack.return_value = "callback_data"
 
