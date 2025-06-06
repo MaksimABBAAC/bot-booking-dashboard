@@ -1,7 +1,7 @@
 from httpx import AsyncClient, HTTPError, HTTPStatusError, RequestError
 
-from config import settings
-from utils.model import Availabl_appointment
+from ..config import settings
+from ..utils.model import Availabl_appointment
 
 
 async def get_available_appointment_all_masters(date = None) -> list[Availabl_appointment]:
@@ -9,7 +9,7 @@ async def get_available_appointment_all_masters(date = None) -> list[Availabl_ap
         try:
             url  = settings.BASE_URL + settings.API_APPOINTMENTS
             if date != None:
-                f'?date={date}'
+                url += f'?date={date}'
             response = await client.get(url)
             response.raise_for_status()
             return [Availabl_appointment(**appointment) 
