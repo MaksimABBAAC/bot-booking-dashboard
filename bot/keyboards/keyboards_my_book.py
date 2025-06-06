@@ -1,6 +1,6 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from keyboards.collbackFactory import DeleteEditCallbackFactory
-from utils.http_appoiment import get_booking_appointment_by_tg_id
+from bot.utils.http_appointment import get_booking_appointment_by_tg_id
 
 
 async def get_cards_appoiment(tg_id):

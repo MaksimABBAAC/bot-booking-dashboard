@@ -1,7 +1,7 @@
 from aiogram import types
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 from keyboards.collbackFactory import DateCallbackFactory, DeleteEditCallbackFactory, MastersCallbackFactory, TimeCallbackFactory
-from utils.http_appoiment import Availabl_appointment, get_available_appointment_by_master_id, get_booking_appointment_by_tg_id
+from bot.utils.http_appointment import Availabl_appointment, get_available_appointment_by_master_id, get_booking_appointment_by_tg_id
 from utils.http_master import get_master_by_id, get_masters_list
 
 

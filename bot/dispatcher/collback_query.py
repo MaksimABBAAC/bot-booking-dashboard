@@ -3,7 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 
 from keyboards.keyboards_master import DateCallbackFactory, MastersCallbackFactory, TimeCallbackFactory, data_message_for_description_master, get_keyboard_time_appointment, DeleteEditCallbackFactory, get_keyboards_masters
-from utils.http_appoiment import book_appointment, delete_book_appointment
+from bot.utils.http_appointment import book_appointment, delete_book_appointment
 
 
 router = Router()
