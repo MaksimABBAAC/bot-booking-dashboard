@@ -1,5 +1,5 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-from keyboards.collbackFactory import DeleteEditCallbackFactory
+from ..keyboards.collbackFactory import DeleteEditCallbackFactory
 from bot.utils.http_appointment import get_booking_appointment_by_tg_id
 
 
@@ -27,7 +27,7 @@ async def get_cards_appoiment(tg_id):
                     .pack()
             )
             cards.append(builder.as_markup())
-    elif booking_appoiments_list == 'error':
+    elif booking_appoiments_list is None:
         error = 'error'
 
     return cards, error

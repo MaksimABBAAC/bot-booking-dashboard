@@ -2,7 +2,7 @@ from aiogram import Router
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 
-from keyboards.keyboards_master import DateCallbackFactory, MastersCallbackFactory, TimeCallbackFactory, data_message_for_description_master, get_keyboard_time_appointment, DeleteEditCallbackFactory, get_keyboards_masters
+from ..keyboards.keyboards_master import DateCallbackFactory, MastersCallbackFactory, TimeCallbackFactory, data_message_for_description_master, get_keyboard_time_appointment, DeleteEditCallbackFactory, get_keyboards_masters
 from bot.utils.http_appointment import book_appointment, delete_book_appointment
 
 
@@ -16,8 +16,9 @@ async def callbacks_master(
     description, keyboard = await data_message_for_description_master(callback_data.master_id)
     await callback.message.answer(description + "\n выберете дату", reply_markup= keyboard)
 
+
 @router.callback_query(DateCallbackFactory.filter())
-async def callbacks_master(
+async def callbacks_date(
     callback: CallbackQuery,
     callback_data: DateCallbackFactory
 ):
@@ -28,7 +29,7 @@ async def callbacks_master(
     await callback.message.answer("Выберете время\n", reply_markup= keyboard)
 
 @router.callback_query(TimeCallbackFactory.filter())
-async def callbacks_master(
+async def callbacks_time(
     callback: CallbackQuery, 
     callback_data: TimeCallbackFactory,
     state: FSMContext
@@ -67,7 +68,7 @@ async def callbacks_master(
 
 
 @router.callback_query(DeleteEditCallbackFactory.filter())
-async def delete_book(
+async def delete_edit_book(
     callback: CallbackQuery,
     callback_data: DeleteEditCallbackFactory,
     state: FSMContext

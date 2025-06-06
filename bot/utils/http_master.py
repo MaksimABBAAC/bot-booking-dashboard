@@ -1,7 +1,7 @@
 from httpx import AsyncClient, HTTPError
 
 from .model import Master
-from config import settings
+from ..config import settings
 
 
 async def get_masters_list() -> list[Master]:

@@ -41,7 +41,7 @@ async def get_booking_appointment_by_tg_id(tg_id: int) -> list[Availabl_appointm
             response.raise_for_status()
             return [Availabl_appointment(**appointment) for appointment in response.json()]
         except (HTTPError, ValueError, KeyError):
-            return 'error'
+            return None
 
 
 async def book_appointment(tg_id: int, appointment_id: int) -> dict:
