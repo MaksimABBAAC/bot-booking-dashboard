@@ -1,6 +1,12 @@
-import pytest
-from bot.utils.http_appointment import book_appointment, delete_book_appointment, get_available_appointment_all_masters, get_available_appointment_by_master_id, get_booking_appointment_by_tg_id
 from datetime import date
+
+import pytest
+
+from bot.utils.http_appointment import (book_appointment,
+                                        delete_book_appointment,
+                                        get_available_appointment_all_masters,
+                                        get_available_appointment_by_master_id,
+                                        get_booking_appointment_by_tg_id)
 
 
 @pytest.mark.asyncio
@@ -22,7 +28,9 @@ async def test_get_available_appointment_all_masters(httpx_mock):
     )
 
     result = await get_available_appointment_all_masters()
-    print("Реальный результат тест test_get_available_appointment_all_masters: ", result)
+    print(
+        "Реальный результат тест test_get_available_appointment_all_masters: ", result
+    )
     assert isinstance(result, list)
     assert len(result) == 1
     assert result[0].id == 1
@@ -60,11 +68,11 @@ async def test_get_booking_appointment_by_tg_id(httpx_mock):
         {
             "id": 3,
             "master": 1,
-            "client": 123,  # Здесь client — это tg_id
+            "client": 123,
             "date": "2023-10-03",
             "start_time": "14:00",
             "end_time": "15:00",
-            "is_available": False,  # Запись уже занята
+            "is_available": False,
         }
     ]
     httpx_mock.add_response(

@@ -1,8 +1,10 @@
+from unittest.mock import AsyncMock, MagicMock, patch
+
 import pytest
-from unittest.mock import AsyncMock, patch, MagicMock
-from aiogram.types import Message, ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
 
 from bot.dispatcher.comands import cmd_booking, cmd_my_appoiments, cmd_start
+
 
 @pytest.mark.asyncio
 @patch("bot.dispatcher.comands.get_keyboard_start", new_callable=AsyncMock)
@@ -31,7 +33,7 @@ async def test_cmd_my_appoiments_success(mock_get_cards_appoiment):
 
     mock_message = AsyncMock(spec=Message)
     mock_message.answer = AsyncMock()
-    
+
     mock_message.from_user = MagicMock()
     mock_message.from_user.id = 123
 
@@ -54,7 +56,7 @@ async def test_cmd_my_appoiments_error(mock_get_cards_appoiment):
 
     mock_message = AsyncMock(spec=Message)
     mock_message.answer = AsyncMock()
-    
+
     mock_message.from_user = MagicMock()
     mock_message.from_user.id = 123
 
@@ -71,7 +73,7 @@ async def test_cmd_my_appoiments_no_cards(mock_get_cards_appoiment):
 
     mock_message = AsyncMock(spec=Message)
     mock_message.answer = AsyncMock()
-    
+
     mock_message.from_user = MagicMock()
     mock_message.from_user.id = 123
 
@@ -89,7 +91,7 @@ async def test_cmd_booking(mock_get_keyboards_masters):
 
     mock_message = AsyncMock(spec=Message)
     mock_message.answer = AsyncMock()
-    
+
     mock_message.from_user = MagicMock()
     mock_message.from_user.id = 123
 
@@ -97,6 +99,5 @@ async def test_cmd_booking(mock_get_keyboards_masters):
 
     mock_get_keyboards_masters.assert_awaited_once()
     mock_message.answer.assert_awaited_once_with(
-        "Выберете мастера из списка", 
-        reply_markup=mock_keyboard
+        "Выберете мастера из списка", reply_markup=mock_keyboard
     )

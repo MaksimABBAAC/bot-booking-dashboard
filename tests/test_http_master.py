@@ -1,7 +1,9 @@
 import pytest
-from bot.utils.http_master import get_masters_list, get_master_by_id
-from bot.utils.model import Master
+
 from bot.config import settings
+from bot.utils.http_master import get_master_by_id, get_masters_list
+from bot.utils.model import Master
+
 
 @pytest.mark.asyncio
 async def test_get_masters_list_success(httpx_mock):
@@ -12,7 +14,7 @@ async def test_get_masters_list_success(httpx_mock):
             "surname": "Surname One",
             "patronymic": "Patronymic One",
             "description": "Description One",
-            "specialty": "Specialty One"
+            "specialty": "Specialty One",
         },
         {
             "id": 2,
@@ -20,7 +22,7 @@ async def test_get_masters_list_success(httpx_mock):
             "surname": "Surname Two",
             "patronymic": "Patronymic Two",
             "description": "Description Two",
-            "specialty": "Specialty Two"
+            "specialty": "Specialty Two",
         },
     ]
     url = settings.BASE_URL + settings.API_MASTERS
@@ -44,6 +46,7 @@ async def test_get_masters_list_success(httpx_mock):
     assert result[0].description == "Description One"
     assert result[0].specialty == "Specialty One"
 
+
 @pytest.mark.asyncio
 async def test_get_masters_list_failure(httpx_mock):
     url = settings.BASE_URL + settings.API_MASTERS
@@ -57,6 +60,7 @@ async def test_get_masters_list_failure(httpx_mock):
     result = await get_masters_list()
     assert result is None
 
+
 @pytest.mark.asyncio
 async def test_get_master_by_id_success(httpx_mock):
     master_id = 1
@@ -67,7 +71,7 @@ async def test_get_master_by_id_success(httpx_mock):
             "surname": "Surname One",
             "patronymic": "Patronymic One",
             "description": "Description One",
-            "specialty": "Specialty One"
+            "specialty": "Specialty One",
         },
         {
             "id": 2,
@@ -75,7 +79,7 @@ async def test_get_master_by_id_success(httpx_mock):
             "surname": "Surname Two",
             "patronymic": "Patronymic Two",
             "description": "Description Two",
-            "specialty": "Specialty Two"
+            "specialty": "Specialty Two",
         },
     ]
 
@@ -98,6 +102,7 @@ async def test_get_master_by_id_success(httpx_mock):
     assert result.description == "Description One"
     assert result.specialty == "Specialty One"
 
+
 @pytest.mark.asyncio
 async def test_get_master_by_id_not_found(httpx_mock):
     master_id = 3
@@ -108,7 +113,7 @@ async def test_get_master_by_id_not_found(httpx_mock):
             "surname": "Surname One",
             "patronymic": "Patronymic One",
             "description": "Description One",
-            "specialty": "Specialty One"
+            "specialty": "Specialty One",
         },
         {
             "id": 2,
@@ -116,7 +121,7 @@ async def test_get_master_by_id_not_found(httpx_mock):
             "surname": "Surname Two",
             "patronymic": "Patronymic Two",
             "description": "Description Two",
-            "specialty": "Specialty Two"
+            "specialty": "Specialty Two",
         },
     ]
     url = f"{settings.BASE_URL + settings.API_MASTERS}?master_id={master_id}"
@@ -130,6 +135,7 @@ async def test_get_master_by_id_not_found(httpx_mock):
 
     result = await get_master_by_id(master_id)
     assert result is None
+
 
 @pytest.mark.asyncio
 async def test_get_master_by_id_http_error(httpx_mock):

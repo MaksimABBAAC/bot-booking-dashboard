@@ -1,5 +1,5 @@
 import pytest
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import ReplyKeyboardMarkup
 
 from bot.keyboards.keyboard_start import get_keyboard_start
 
@@ -11,6 +11,5 @@ async def test_get_keyboard_time_appointment():
     assert isinstance(markup, ReplyKeyboardMarkup)
     assert len(markup.keyboard) == 2
 
-    # Проверяем текст кнопок
-    assert markup.keyboard[0][0].text == '/my_book'
-    assert markup.keyboard[1][0].text == '/booking'
+    assert markup.keyboard[0][0].text == "/my_book"
+    assert markup.keyboard[1][0].text == "/booking"

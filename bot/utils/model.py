@@ -1,7 +1,7 @@
-from pydantic import BaseModel
 from datetime import date, time
 from typing import Optional
 
+from pydantic import BaseModel
 
 
 class Master(BaseModel):
@@ -12,7 +12,8 @@ class Master(BaseModel):
     description: str
     specialty: str
 
-class Availabl_appointment(BaseModel):
+
+class AvailablAppointment(BaseModel):
     id: int
     master: int
     client: Optional[int] = None
